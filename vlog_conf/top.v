@@ -1,7 +1,44 @@
-config cfg;
-  design top;                     // top-level
-  instance top.aux2.mod use mod2; // use cell to replace all the instances
-endconfig
+//-----------------------------------------------------------------------------
+// Module to be replaced
+//-----------------------------------------------------------------------------
+
+module op_or (
+  input in1,
+  input in2,
+  output outx
+);
+
+  assign outx = in1 | in2;
+
+endmodule
+
+module op_and (
+  input in1,
+  input in2,
+  output outx
+);
+
+  assign outx = in1 & in2;
+
+endmodule
+
+//-----------------------------------------------------------------------------
+// Auxiliary module
+//-----------------------------------------------------------------------------
+
+module aux (
+  input in1,
+  input in2,
+  output outx
+);
+
+  op_and opx_i (.in1(in1), .in2(in2), .outx(outx));
+
+endmodule
+
+//-----------------------------------------------------------------------------
+// Top-level
+//-----------------------------------------------------------------------------
 
 module top (
   input  in1,
@@ -10,25 +47,16 @@ module top (
   output out2
 );
 
-  aux aux1 (.in1(in1), .in2(in2), .out(out1));
-  aux aux2 (.in1(in1), .in2(in2), .out(out2));
+  aux aux1_i (.in1(in1), .in2(in2), .outx(out1));
+  aux aux2_i (.in1(in1), .in2(in2), .outx(out2));
 
 endmodule
 
-module aux (input in1, input in2, output out);
+//-----------------------------------------------------------------------------
+// Configuration
+//-----------------------------------------------------------------------------
 
-  mod1 mod (.in1(in1), .in2(in2), .out(out));
-
-endmodule
-
-module mod1 (input in1, input in2, output out);
-
-  assign out = in1 & in2;
-
-endmodule
-
-module mod2 (input in1, input in2, output out);
-
-  assign out = in1 | in2;
-
-endmodule
+config cfg;
+  design top;
+  instance top.aux2_i.opx_i use op_or;
+endconfig
