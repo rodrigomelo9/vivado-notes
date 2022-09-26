@@ -26,4 +26,4 @@ After "Automatic Gated Clock conversion":
 
 Drawbacks:
 * More clock enables implies more control sets, which can be a problem.
-* Depending on the gated clock implementation, you could have differences between simulation and synthesis code.
+* Depending on the gated clock implementation, you could have differences between simulation and synthesis code (there is an example in the ARM white paper [Prototyping ARM Cortex-A Processors using FPGA platforms](https://developer.arm.com/documentation/ecm0545815/latest)).
